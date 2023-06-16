@@ -37,7 +37,7 @@ const SignInForm = ({ setError, setErrorMessage }) => {
           if (res.status === 200) {
             const user = {
               id: res.data.user.id,
-              role: res.data.user.role,
+              role: res.data.user.rol,
               username: res.data.user.username,
               email: res.data.user.email,
               token: res.data.token
