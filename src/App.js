@@ -12,6 +12,8 @@ import SignUpPage from "./pages/SignUpPage";
 import ForgotPasswordPage from "./pages/ForgotPassword";
 import NewPasswordPage from "./pages/NewPassword";
 import MapPage from "./pages/MapPage";
+import UsersPage from "./pages/UsersPage";
+import AdminRoute from "./utils/AdminRoute";
 
 const App = () => {
   /*const { isLoaded } = useJsApiLoader({
@@ -51,8 +53,10 @@ const App = () => {
                 <Layout />
               </RequireAuth>
             }
-          />
-          <Route path="home/map" element={<MapPage/>} />
+          >
+          <Route path="users" element={<AdminRoute><UsersPage /></AdminRoute>} />
+          <Route path="map" element={<MapPage />} />
+          </Route>
         </Routes>
       </AuthProvider>
     </>
