@@ -8,7 +8,7 @@ const AddNewHidenSpot = () => {
     const [lat, setLat] = useState(0)
     const [lng, setLng] = useState(0)
 
-    const center = { lat: 13.795802, lng: -88.961608 };
+    const center = useMemo( () =>  ( { lat: 13.795802, lng: -88.961608 }),[]);
     const { isLoaded } = useJsApiLoader({
       // eslint-disable-next-line no-undef
       googleMapsApiKey: process.env.REACT_APP_MAPS_API_KEY,

@@ -12,8 +12,7 @@ const Map = () => {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_MAPS_API_KEY,
   });
-  const center = { lat: 13.795802, lng: -88.961608 };
-  //const casa =   { lat : 13.670549, lng : -89.239163}
+  const center = useMemo( () =>  ( { lat: 13.795802, lng: -88.961608 }),[]);  //const casa =   { lat : 13.670549, lng : -89.239163}
 
   const fetchingHiddenSpots = async () => {
     try {
