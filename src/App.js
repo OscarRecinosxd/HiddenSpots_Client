@@ -1,8 +1,6 @@
 import React from "react";
 import { AuthProvider } from "./contexts/AuthProvider";
 import { Route, Routes } from "react-router-dom";
-/*import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
-import CONFIG from "./config/config.js";*/
 
 import SignInPage from "./pages/SignInPage";
 import RequireAuth from "./utils/RequireAuth";
@@ -16,28 +14,7 @@ import UsersPage from "./pages/UsersPage";
 import AdminRoute from "./utils/AdminRoute";
 
 const App = () => {
-  /*const { isLoaded } = useJsApiLoader({
-    // eslint-disable-next-line no-undef
-    googleMapsApiKey: CONFIG.API_KEY,
-  });
-  const center = { lat: 13.795802, lng: -88.961608 };
-  const casa =   { lat : 13.670549, lng : -89.239163}
-
-  if (!isLoaded) {
-    return <div>Loading....</div>;
-  } */
-
   return (
-    /*<GoogleMap
-      center={center}
-      zoom={10}
-      mapContainerStyle={{ width: '100%', height: "800px"}}>
-    {isLoaded && console.log("Loaded")}
-    {isLoaded && <Marker position={casa} />}
-    <Marker position={casa}/>
-
-    </GoogleMap>*/
-
     <>
       <AuthProvider>
         <Routes>

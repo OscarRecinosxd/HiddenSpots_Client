@@ -1,17 +1,17 @@
 export const adminPages = [
     {
         path: "users",
-        title: "Users"
+        title: "Usuarios"
     },
     {
         path: "categories",
-        title: "Categories"
+        title: "Categorías"
     },
 ]
 
 export const touristPages = [
     {
         path: "map",
-        title: "Map"
+        title: "Mapa"
     },
 ]

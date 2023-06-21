@@ -14,32 +14,32 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
 const columns = [
-  { id: "username", label: "Username", minWidth: 170 },
-  { id: "email", label: "Email", minWidth: 100 },
+  { id: "username", label: "Nombre de usuario", minWidth: 170 },
+  { id: "email", label: "Correo electrónico", minWidth: 100 },
   {
-    id: "rol",
-    label: "Role",
+    id: "roleId",
+    label: "Rol",
     minWidth: 100,
     format: (value) => (value === 1 ? "Administrador" : "Turista"),
   },
-  {
-    id: "isActive",
-    label: "isActive",
-    minWidth: 100,
-    format: (value) => (value === 1 ? "Administrador" : "Turista"),
-  },
+  // {
+  //   id: "isActive",
+  //   label: "Estado",
+  //   minWidth: 100,
+  //   format: (value) => (value === 1 ? "Administrador" : "Turista"),
+  // },
   {
     id: "id",
-    label: "Actions",
+    label: "Acciones",
     minWidth: 50,
     format: (value) => (
       <div key={value}>
-        <Tooltip title="Edit">
+        <Tooltip title="Editar">
           <IconButton>
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Deactivate">
+        <Tooltip title="Desactivar">
           <IconButton>
             <DeleteIcon />
           </IconButton>
