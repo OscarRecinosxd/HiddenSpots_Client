@@ -22,12 +22,12 @@ const columns = [
     minWidth: 100,
     format: (value) => (value === 1 ? "Administrador" : "Turista"),
   },
-  // {
-  //   id: "isActive",
-  //   label: "Estado",
-  //   minWidth: 100,
-  //   format: (value) => (value === 1 ? "Administrador" : "Turista"),
-  // },
+  {
+     id: "isActive",
+     label: "Estado",
+     minWidth: 100,
+     format: (value) => (value === true ? "Activo" : "Inactivo"),
+  },
   {
     id: "id",
     label: "Acciones",
@@ -59,6 +59,8 @@ const UsersTable = () => {
       .get(process.env.REACT_APP_API_URL + "admin/users")
       .then((res) => {
         if (res.status === 200) {
+          console.log(res.data[0].isActive)
+          console.log(res.data)
           setUsersList(res.data);
         }
       })
@@ -103,7 +105,7 @@ const UsersTable = () => {
                       const value = row[column.id];
                       return (
                         <TableCell key={index} align={column.align}>
-                          {column.format && typeof value === "number"
+                          {column.format && (typeof value === "number" || typeof value==="boolean")
                             ? column.format(value)
                             : value}
                         </TableCell>
