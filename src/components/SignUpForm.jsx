@@ -62,7 +62,7 @@ const SignUpForm = ({ setStatus, setMessage }) => {
             margin="normal"
             required
             id="username"
-            label="Username"
+            label="Nombre de usuario"
             name="username"
             autoComplete="username"
             autoFocus
@@ -79,7 +79,7 @@ const SignUpForm = ({ setStatus, setMessage }) => {
             margin="normal"
             required
             id="email"
-            label="Email"
+            label="Correo electrónico"
             name="email"
             autoComplete="email"
             onChange={(e) =>
@@ -95,7 +95,7 @@ const SignUpForm = ({ setStatus, setMessage }) => {
             margin="normal"
             required
             name="password"
-            label="Password"
+            label="Contraseña"
             type={showPassword ? "text" : "password"}
             id="password"
             autoComplete="off"
@@ -124,7 +124,7 @@ const SignUpForm = ({ setStatus, setMessage }) => {
             margin="normal"
             required
             name="confirm_password"
-            label="Confirm password"
+            label="Confirmar contraseña"
             type={showConfirmPassword ? "text" : "password"}
             id="confirm_password"
             autoComplete="off"
@@ -156,7 +156,7 @@ const SignUpForm = ({ setStatus, setMessage }) => {
         variant="contained"
         sx={{ mt: 3, mb: 2 }}
       >
-        Sign Up
+        Registrarme
       </LoadingButton>
     </Box>
   );

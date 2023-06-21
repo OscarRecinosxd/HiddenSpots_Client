@@ -39,12 +39,12 @@ const SignInPage = () => {
           <Grid container>
             <Grid item xs>
               <Link href="recover" variant="body2">
-                Forgot password?
+                ¿Olvidaste tu contraseña?
               </Link>
             </Grid>
-            <Grid item>
+            <Grid item xs>
               <Link href="signup" variant="body2">
-                {"Don't have an account? Sign Up"}
+                ¿No tienes una cuenta? Registrate aquí
               </Link>
             </Grid>
           </Grid>

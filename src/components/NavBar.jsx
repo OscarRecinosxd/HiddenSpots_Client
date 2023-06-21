@@ -15,7 +15,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { NavLink } from "react-router-dom";
 import { adminPages, touristPages } from "../utils/Pages";
 
-const settings = ["Profile", "Logout"];
+const settings = ["Perfil", "Cerrar sesión"];
 
 function NavBar() {
   const auth = useAuth();

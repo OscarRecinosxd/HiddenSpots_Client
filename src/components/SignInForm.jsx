@@ -37,7 +37,7 @@ const SignInForm = ({ setError, setErrorMessage }) => {
           if (res.status === 200) {
             const user = {
               id: res.data.user.id,
-              role: res.data.user.rol,
+              role: res.data.user.roleId,
               username: res.data.user.username,
               email: res.data.user.email,
               token: res.data.token
@@ -63,7 +63,7 @@ const SignInForm = ({ setError, setErrorMessage }) => {
         required
         fullWidth
         id="username"
-        label="Username"
+        label="Nombre de usuario"
         name="username"
         autoComplete="username"
         autoFocus
@@ -73,7 +73,7 @@ const SignInForm = ({ setError, setErrorMessage }) => {
         required
         fullWidth
         name="password"
-        label="Password"
+        label="Contraseña"
         type={showPassword ? "text" : "password"}
         id="password"
         autoComplete="current-password"
@@ -98,7 +98,7 @@ const SignInForm = ({ setError, setErrorMessage }) => {
         variant="contained"
         sx={{ mt: 3, mb: 2 }}
       >
-        Sign In
+        Iniciar sesión
       </LoadingButton>
     </Box>
   );
