@@ -14,16 +14,20 @@ import NewHiddenSpotMap from "../components/NewHiddenSpotMap";
 import CreateHiddenSpot from "../components/emergentWindows/CreateHiddenSpot";
 
 const NewHiddenSpotPage = () => {
-  const [open, setOpen] = useState(false);
+  const [openCreateSpotWindow, setOpenCreateSpotWindow] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
+  const [lat, setLat] = useState(0);
+  const [lng, setLng] = useState(0);
+  const [disabled, setDisabled] = useState(true);
   const [status, setStatus] = useState();
+  const [message, setMessage] = useState("");
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickOpenCreateSpotWindow = () => {
+    setOpenCreateSpotWindow(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCloseCreateSpotWindow = () => {
+    setOpenCreateSpotWindow(false);
   };
 
   const handleShowAlert = () => {
@@ -38,25 +42,31 @@ const NewHiddenSpotPage = () => {
       }}
     >
       <Grid container justifyContent="space-between">
-        <Typography variant="h4">Nuevo lugar</Typography>
+        <Typography variant="h4">Manejo de usuarios</Typography>
         <Button
           variant="contained"
-          onClick={handleClickOpen}
+          disabled={disabled}
+          onClick={handleClickOpenCreateSpotWindow}
           startIcon={<RoomIcon />}
         >
           Crear
         </Button>
       </Grid>
-      {open && (
+      {openCreateSpotWindow && (
         <CreateHiddenSpot
-          open={open}
-          handleClose={handleClose}
+          lat={lat}
+          lng={lng}
+          open={openCreateSpotWindow}
+          handleClose={handleCloseCreateSpotWindow}
           setStatus={handleShowAlert}
+          setMessage={setMessage}
         />
       )}
-      {status === true && (
+      {status && (
         <Collapse in={openAlert}>
           <Alert
+            severity={status === true ? "success" : "error"}
+            variant="filled"
             action={
               <IconButton
                 aria-label="close"
@@ -71,11 +81,15 @@ const NewHiddenSpotPage = () => {
             }
             sx={{ my: 2 }}
           >
-            Usuario creado exitosamente!
+            {message}
           </Alert>
         </Collapse>
       )}
-      <NewHiddenSpotMap />
+      <NewHiddenSpotMap
+        setLatitude={setLat}
+        setLongitude={setLng}
+        setDisabled={setDisabled}
+      />
     </Box>
   );
 };
