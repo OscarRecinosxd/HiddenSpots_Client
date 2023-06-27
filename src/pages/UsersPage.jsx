@@ -14,16 +14,17 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 
 const UsersPage = () => {
-  const [open, setOpen] = useState(false);
+  const [openCreateUserWindow, setOpenCreateUserWindow] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
   const [status, setStatus] = useState();
+  const [message, setMessage] = useState("");
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickOpenCreateUserWindow = () => {
+    setOpenCreateUserWindow(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCloseCreateUserWindow = () => {
+    setOpenCreateUserWindow(false);
   };
 
   const handleShowAlert = () => {
@@ -41,22 +42,25 @@ const UsersPage = () => {
         <Typography variant="h4">Manejo de usuarios</Typography>
         <Button
           variant="contained"
-          onClick={handleClickOpen}
+          onClick={handleClickOpenCreateUserWindow}
           startIcon={<PersonAddIcon />}
         >
           Crear
         </Button>
       </Grid>
-      {open && (
+      {openCreateUserWindow && (
         <CreateUser
-          open={open}
-          handleClose={handleClose}
+          open={openCreateUserWindow}
+          handleClose={handleCloseCreateUserWindow}
           setStatus={handleShowAlert}
+          setMessage={setMessage}
         />
       )}
-      {status === true && (
+      {status && (
         <Collapse in={openAlert}>
           <Alert
+            severity={status === true ? "success" : "error"}
+            variant="filled"
             action={
               <IconButton
                 aria-label="close"
@@ -71,11 +75,14 @@ const UsersPage = () => {
             }
             sx={{ my: 2 }}
           >
-            Usuario creado exitosamente!
+            {message}
           </Alert>
         </Collapse>
       )}
-      <UsersTable />
+      <UsersTable
+        setStatus={handleShowAlert}
+        setMessage={setMessage}
+      />
     </Box>
   );
 };

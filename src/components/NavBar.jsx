@@ -39,7 +39,7 @@ function NavBar() {
   };
 
   const handleOptionUserMenu = (option) => {
-    if (option === "Logout") {
+    if (option === "Cerrar sesión") {
       auth.logout();
     }
   };
