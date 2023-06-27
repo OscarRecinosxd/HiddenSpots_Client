@@ -31,6 +31,7 @@ const CreateUser = ({ open, handleClose, setStatus, setMessage }) => {
     confirm_password: "",
     roleId: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [role, setRole] = useState("");
   const [roles, setRoles] = useState([]);
@@ -58,7 +59,6 @@ const CreateUser = ({ open, handleClose, setStatus, setMessage }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     addUser(
-      setData,
       role,
       data,
       setStatus,
