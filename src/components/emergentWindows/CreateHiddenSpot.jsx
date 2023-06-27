@@ -68,7 +68,7 @@ const CreateHiddenSpot = ({
 
   const handleSelectFile = (e) => {
     e.preventDefault();
-    var file = e.target.files[0];
+    let file = e.target.files[0];
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
