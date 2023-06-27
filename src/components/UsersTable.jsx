@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { useLists } from "../contexts/ListsContext";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -12,62 +13,61 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import ToggleOnIcon from "@mui/icons-material/ToggleOn";
+import ToggleOffIcon from "@mui/icons-material/ToggleOff";
+import ChangeUserStatus from "./emergentWindows/ChangeUserStatus";
 
-const columns = [
-  { id: "username", label: "Nombre de usuario", minWidth: 170 },
-  { id: "email", label: "Correo electrónico", minWidth: 100 },
-  {
-    id: "roleId",
-    label: "Rol",
-    minWidth: 100,
-    format: (value) => (value === 1 ? "Administrador" : "Turista"),
-  },
-  {
-     id: "isActive",
-     label: "Estado",
-     minWidth: 100,
-     format: (value) => (value === true ? "Activo" : "Inactivo"),
-  },
-  {
-    id: "id",
-    label: "Acciones",
-    minWidth: 50,
-    format: (value) => (
-      <div key={value}>
-        <Tooltip title="Editar">
-          <IconButton>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Desactivar">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      </div>
-    ),
-  },
-];
 
-const UsersTable = () => {
+const UsersTable = ({ setStatus, setMessage }) => {
+  const { usersList } = useLists();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [usersList, setUsersList] = useState([]);
+  const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
+  const [userToChangeStatus, setUserToChangeStatus] = useState(null);
 
-  useEffect(() => {
-    axios
-      .get(process.env.REACT_APP_API_URL + "admin/users")
-      .then((res) => {
-        if (res.status === 200) {
-          console.log(res.data[0].isActive)
-          console.log(res.data)
-          setUsersList(res.data);
-        }
-      })
-      .catch((err) => {
-        throw console.error(err);
-      });
-  }, []);
+  const columns = [
+    { id: "username", label: "Nombre de usuario", minWidth: 170 },
+    { id: "email", label: "Correo electrónico", minWidth: 100 },
+    {
+      id: "roleId",
+      label: "Rol",
+      minWidth: 100,
+      format: (value) => (value === 1 ? "Administrador" : "Turista"),
+    },
+    {
+      id: "isActive",
+      label: "Estado",
+      minWidth: 100,
+      format: (value) => formatUserStatus(value),
+    },
+    {
+      id: "id",
+      label: "Acciones",
+      minWidth: 50,
+      format: (value) => formatActions(value),
+    },
+  ];
+  const formatUserStatus = (status) =>
+  status === true ? (
+    <ToggleOnIcon fontSize="large" color="success" />
+  ) : (
+    <ToggleOffIcon fontSize="large" color="error" />
+  );
+
+const formatActions = (id) => (
+  <div key={id}>
+    <Tooltip title="Editar">
+      <IconButton>
+        <EditIcon />
+      </IconButton>
+    </Tooltip>
+    <Tooltip title="Desactivar">
+      <IconButton onClick={() => handleOpenDeactivateUserDialog(id)}>
+        <DeleteIcon />
+      </IconButton>
+    </Tooltip>
+  </div>
+);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -78,15 +78,33 @@ const UsersTable = () => {
     setPage(0);
   };
 
+  const handleOpenDeactivateUserDialog = (userId) => {
+    setUserToChangeStatus(userId);
+    setOpenConfirmationDialog(true);
+  };
+
+  const handleCloseDeactivateUserDialog = () => {
+    setOpenConfirmationDialog(false);
+  };
+
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
+       {openConfirmationDialog && (
+        <ChangeUserStatus
+          userId={userToChangeStatus}
+          open={openConfirmationDialog}
+          handleClose={handleCloseDeactivateUserDialog}
+          setStatus={setStatus}
+          setMessage={setMessage}
+        />
+      )}
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="users table">
           <TableHead>
             <TableRow>
-              {columns.map((column, index) => (
+            {columns.map((column) => (
                 <TableCell
-                  key={index}
+                  key={column.id}
                   align={column.align}
                   style={{ minWidth: column.minWidth }}
                 >
@@ -97,15 +115,17 @@ const UsersTable = () => {
           </TableHead>
           <TableBody>
             {usersList
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
+               ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+               .map((row) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={index}>
-                    {columns.map((column, index) => {
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                    {columns.map((column) => {
                       const value = row[column.id];
                       return (
-                        <TableCell key={index} align={column.align}>
-                          {column.format && (typeof value === "number" || typeof value==="boolean")
+                        <TableCell key={column.id} align={column.align}>
+                          {column.format &&
+                          (typeof value === "number" ||
+                            typeof value === "boolean")
                             ? column.format(value)
                             : value}
                         </TableCell>
@@ -129,5 +149,10 @@ const UsersTable = () => {
     </Paper>
   );
 };
+UsersTable.propTypes = {
+  setStatus: PropTypes.func.isRequired,
+  setMessage: PropTypes.func.isRequired,
+};
+
 
 export default UsersTable;

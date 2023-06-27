@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { useLists } from "../../contexts/ListsContext";
 import axios from "axios";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -21,8 +22,8 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-const CreateUser = ({ open, handleClose, setStatus }) => {
-  const [showPassword, setShowPassword] = useState(false);
+const CreateUser = ({ open, handleClose, setStatus, setMessage }) => {
+  const { addUser } = useLists();
   const [data, setData] = useState({
     username: "",
     email: "",
@@ -56,30 +57,15 @@ const CreateUser = ({ open, handleClose, setStatus }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    try {
-      setData((prevState) => ({
-        ...prevState,
-        roleId: role,
-      }));
-      axios
-        .post(process.env.REACT_APP_API_URL + "admin/save-user", data)
-        .then((res) => {
-          if (res.status === 201) {
-            setStatus(true);
-            handleClose();
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          setErrorMessage(
-            err.response.data.result
-              ? err.response.data.result
-              : err.response.data
-          );
-        });
-    } catch (error) {
-      throw console.error(error);
-    }
+    addUser(
+      setData,
+      role,
+      data,
+      setStatus,
+      handleClose,
+      setMessage,
+      setErrorMessage
+    );
   };
 
   return (
@@ -230,6 +216,7 @@ CreateUser.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   setStatus: PropTypes.func.isRequired,
+  setMessage: PropTypes.func.isRequired,
 };
 
 export default CreateUser;
