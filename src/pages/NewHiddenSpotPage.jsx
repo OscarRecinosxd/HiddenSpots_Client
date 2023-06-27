@@ -42,7 +42,7 @@ const NewHiddenSpotPage = () => {
       }}
     >
       <Grid container justifyContent="space-between">
-        <Typography variant="h4">Manejo de usuarios</Typography>
+        <Typography variant="h4">Crear lugar</Typography>
         <Button
           variant="contained"
           disabled={disabled}
