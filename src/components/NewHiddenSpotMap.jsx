@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
+import React, { useState, useMemo } from 'react';
 import { GoogleMap, MarkerF, useJsApiLoader } from '@react-google-maps/api';
-import React, { useState } from 'react'
 
-const AddNewHidenSpot = () => {
+const NewHiddenSpotMap = () => {
     const [marker, setMarker] = useState(null)
     const [isAnyMarker, setIsAnyMarker] = useState(false)
     const [lat, setLat] = useState(0)
@@ -28,7 +28,6 @@ const AddNewHidenSpot = () => {
     };
     return (
       <>
-        <h1>Create new hidden spot</h1>
         <GoogleMap
           onClick={handleOnClick}
           center={center}
@@ -43,4 +42,4 @@ const AddNewHidenSpot = () => {
     );
 }
 
-export default AddNewHidenSpot
+export default NewHiddenSpotMap
