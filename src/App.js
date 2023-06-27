@@ -12,6 +12,7 @@ import NewPasswordPage from "./pages/NewPassword";
 import MapPage from "./pages/MapPage";
 import UsersPage from "./pages/UsersPage";
 import AdminRoute from "./utils/AdminRoute";
+import NewHiddenSpotPage from "./pages/NewHiddenSpotPage";
 
 const App = () => {
   return (
@@ -69,6 +70,7 @@ const App = () => {
                 }
               />
               <Route path="map" element={<MapPage />} />
+              <Route path="newhs" element={<NewHiddenSpotPage />} />
             </Route>
           </Routes>
         </ListsProvider>

@@ -140,7 +140,7 @@ const formatActions = (id) => (
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={usersList.length}
+        count={usersList?.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

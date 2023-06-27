@@ -8,7 +8,6 @@ export const ListsProvider = ({ children }) => {
   const [usersList, setUsersList] = useState();
 
   const addUser = (
-    setData,
     role,
     data,
     setStatus,
@@ -17,17 +16,14 @@ export const ListsProvider = ({ children }) => {
     setErrorMessage
   ) => {
     try {
-      setData((prevState) => ({
-        ...prevState,
-        roleId: role,
-      }));
       axios
-        .post(process.env.REACT_APP_API_URL + "admin/save-user", data)
+        .post(process.env.REACT_APP_API_URL + "admin/save-user", {...data, role: role})
         .then((res) => {
           if (res.status === 201) {
             setStatus(true);
             handleClose();
             setMessage("Usuario creado exitosamente.");
+            getUsers();
           }
         })
         .catch((err) => {
@@ -52,6 +48,7 @@ export const ListsProvider = ({ children }) => {
             setStatus(true);
             setMessage("El estado del usuario se actualizó exitosamente.");
             handleClose();
+            getUsers();
           }
         })
         .catch((err) => {
@@ -63,7 +60,7 @@ export const ListsProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
+  const getUsers = () => {
     try {
       axios
         .get(process.env.REACT_APP_API_URL + "admin/users")
@@ -78,7 +75,11 @@ export const ListsProvider = ({ children }) => {
     } catch (error) {
       throw console.error(error);
     }
-  }, [addUser, toggleUserStatus]);
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   const values = useMemo(
     () => ({
