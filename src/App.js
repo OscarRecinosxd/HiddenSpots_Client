@@ -12,6 +12,7 @@ import NewPasswordPage from "./pages/NewPassword";
 import MapPage from "./pages/MapPage";
 import UsersPage from "./pages/UsersPage";
 import AdminRoute from "./utils/AdminRoute";
+import Home from "./pages/Home";
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
             element={
               <RequireAuth>
                 <Layout />
+                <Home/>
               </RequireAuth>
             }
           >
