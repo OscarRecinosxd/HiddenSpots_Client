@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import axios from "axios";
 import { useLists } from "../contexts/ListsContext";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -16,14 +17,17 @@ import EditIcon from "@mui/icons-material/Edit";
 import ToggleOnIcon from "@mui/icons-material/ToggleOn";
 import ToggleOffIcon from "@mui/icons-material/ToggleOff";
 import ChangeUserStatus from "./emergentWindows/ChangeUserStatus";
-
+import EditUser from "./emergentWindows/EditUser";
 
 const UsersTable = ({ setStatus, setMessage }) => {
   const { usersList } = useLists();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
-  const [userToChangeStatus, setUserToChangeStatus] = useState(null);
+  const [openEditUserWindow, setOpenEditUserWindow] = useState(false);
+  const [userToModify, setUserToModify] = useState(null);
+  const [userInfo, setUserInfo] = useState({});
+  const totalUsers = usersList?.length || 0;
 
   const columns = [
     { id: "username", label: "Nombre de usuario", minWidth: 170 },
@@ -48,26 +52,26 @@ const UsersTable = ({ setStatus, setMessage }) => {
     },
   ];
   const formatUserStatus = (status) =>
-  status === true ? (
-    <ToggleOnIcon fontSize="large" color="success" />
-  ) : (
-    <ToggleOffIcon fontSize="large" color="error" />
-  );
+    status === true ? (
+      <ToggleOnIcon fontSize="large" color="success" />
+    ) : (
+      <ToggleOffIcon fontSize="large" color="error" />
+    );
 
-const formatActions = (id) => (
-  <div key={id}>
-    <Tooltip title="Editar">
-      <IconButton>
-        <EditIcon />
-      </IconButton>
-    </Tooltip>
-    <Tooltip title="Desactivar">
-      <IconButton onClick={() => handleOpenDeactivateUserDialog(id)}>
-        <DeleteIcon />
-      </IconButton>
-    </Tooltip>
-  </div>
-);
+  const formatActions = (id) => (
+    <div key={id}>
+      <Tooltip title="Editar">
+        <IconButton onClick={() => handleOpenEditUserWindow(id)}>
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Desactivar/Activar">
+        <IconButton onClick={() => handleOpenDeactivateUserDialog(id)}>
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
+    </div>
+  );
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -79,7 +83,7 @@ const formatActions = (id) => (
   };
 
   const handleOpenDeactivateUserDialog = (userId) => {
-    setUserToChangeStatus(userId);
+    setUserToModify(userId);
     setOpenConfirmationDialog(true);
   };
 
@@ -87,13 +91,34 @@ const formatActions = (id) => (
     setOpenConfirmationDialog(false);
   };
 
+  const handleOpenEditUserWindow = async (userId) => {
+    setUserToModify(userId);
+    const { data } = await axios.get(process.env.REACT_APP_API_URL + `admin/${userId}`);
+    setUserInfo(data);
+    setOpenEditUserWindow(true);
+  };
+
+  const handleCloseEditUserWindow = () => {
+    setOpenEditUserWindow(false);
+  };
+
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
-       {openConfirmationDialog && (
+      {openConfirmationDialog && (
         <ChangeUserStatus
-          userId={userToChangeStatus}
+          userId={userToModify}
           open={openConfirmationDialog}
           handleClose={handleCloseDeactivateUserDialog}
+          setStatus={setStatus}
+          setMessage={setMessage}
+        />
+      )}
+      {openEditUserWindow && userInfo && (
+        <EditUser
+          userId={userToModify}
+          userToEdit={userInfo}
+          open={openEditUserWindow}
+          handleClose={handleCloseEditUserWindow}
           setStatus={setStatus}
           setMessage={setMessage}
         />
@@ -102,7 +127,7 @@ const formatActions = (id) => (
         <Table stickyHeader aria-label="users table">
           <TableHead>
             <TableRow>
-            {columns.map((column) => (
+              {columns.map((column) => (
                 <TableCell
                   key={column.id}
                   align={column.align}
@@ -115,8 +140,8 @@ const formatActions = (id) => (
           </TableHead>
           <TableBody>
             {usersList
-               ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-               .map((row) => {
+              ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
                     {columns.map((column) => {
@@ -140,7 +165,7 @@ const formatActions = (id) => (
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={usersList?.length}
+        count={totalUsers}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -153,6 +178,5 @@ UsersTable.propTypes = {
   setStatus: PropTypes.func.isRequired,
   setMessage: PropTypes.func.isRequired,
 };
-
 
 export default UsersTable;

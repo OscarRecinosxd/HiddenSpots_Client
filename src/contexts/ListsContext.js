@@ -38,6 +38,39 @@ export const ListsProvider = ({ children }) => {
       throw console.error(error);
     }
   };
+  
+  const editUser = (
+    userId,
+    role,
+    data,
+    setStatus,
+    handleClose,
+    setMessage,
+    setErrorMessage
+  ) => {
+    try {
+      axios
+        .patch(process.env.REACT_APP_API_URL + `admin/update-user/${userId}`, {...data, roleId: role})
+        .then((res) => {
+          if (res.status === 200) {
+            setStatus(true);
+            handleClose();
+            setMessage("Usuario editado exitosamente.");
+            getUsers();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          setErrorMessage(
+            err.response.data.result
+              ? err.response.data.result
+              : err.response.data
+          );
+        });
+    } catch (error) {
+      throw console.error(error);
+    }
+  };
 
   const toggleUserStatus = (userId, setStatus, setMessage, handleClose) => {
     try {
@@ -85,6 +118,7 @@ export const ListsProvider = ({ children }) => {
     () => ({
       usersList,
       addUser,
+      editUser,
       toggleUserStatus,
     }),
     [usersList]
