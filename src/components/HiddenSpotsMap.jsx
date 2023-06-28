@@ -1,10 +1,9 @@
 /* eslint-disable no-undef */
-import React, { useState,useMemo } from "react";
-
+import React, { useState, useMemo } from "react";
 import { GoogleMap, InfoWindowF, MarkerF, useJsApiLoader } from "@react-google-maps/api";
 import axios from "axios";
 
-const Map = () => {
+const HiddenSpotsMap = () => {
   const [hiddenSpotsMarkers, setHiddenSpotsMarkers] = useState();
   const [ActiveInfoWindow, setActiveInfoWindow] = useState()
   const [isData, setIsData] = useState(false);
@@ -77,4 +76,4 @@ const Map = () => {
   );
 };
 
-export default Map;
+export default HiddenSpotsMap;

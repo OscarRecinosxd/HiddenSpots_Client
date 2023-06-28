@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import UsersTable from "../components/UsersTable";
-import CreateUser from "../components/emergentWindows/CreateUser";
+import RoomIcon from "@mui/icons-material/Room";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Alert,
   Box,
@@ -11,20 +10,24 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import NewHiddenSpotMap from "../components/NewHiddenSpotMap";
+import CreateHiddenSpot from "../components/emergentWindows/CreateHiddenSpot";
 
-const UsersPage = () => {
-  const [openCreateUserWindow, setOpenCreateUserWindow] = useState(false);
+const NewHiddenSpotPage = () => {
+  const [openCreateSpotWindow, setOpenCreateSpotWindow] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
+  const [lat, setLat] = useState(0);
+  const [lng, setLng] = useState(0);
+  const [disabled, setDisabled] = useState(true);
   const [status, setStatus] = useState();
   const [message, setMessage] = useState("");
 
-  const handleClickOpenCreateUserWindow = () => {
-    setOpenCreateUserWindow(true);
+  const handleClickOpenCreateSpotWindow = () => {
+    setOpenCreateSpotWindow(true);
   };
 
-  const handleCloseCreateUserWindow = () => {
-    setOpenCreateUserWindow(false);
+  const handleCloseCreateSpotWindow = () => {
+    setOpenCreateSpotWindow(false);
   };
 
   const handleShowAlert = () => {
@@ -39,19 +42,22 @@ const UsersPage = () => {
       }}
     >
       <Grid container justifyContent="space-between">
-        <Typography variant="h4">Manejo de usuarios</Typography>
+        <Typography variant="h4">Crear lugar</Typography>
         <Button
           variant="contained"
-          onClick={handleClickOpenCreateUserWindow}
-          startIcon={<PersonAddIcon />}
+          disabled={disabled}
+          onClick={handleClickOpenCreateSpotWindow}
+          startIcon={<RoomIcon />}
         >
           Crear
         </Button>
       </Grid>
-      {openCreateUserWindow && (
-        <CreateUser
-          open={openCreateUserWindow}
-          handleClose={handleCloseCreateUserWindow}
+      {openCreateSpotWindow && (
+        <CreateHiddenSpot
+          lat={lat}
+          lng={lng}
+          open={openCreateSpotWindow}
+          handleClose={handleCloseCreateSpotWindow}
           setStatus={handleShowAlert}
           setMessage={setMessage}
         />
@@ -79,12 +85,13 @@ const UsersPage = () => {
           </Alert>
         </Collapse>
       )}
-      <UsersTable
-        setStatus={handleShowAlert}
-        setMessage={setMessage}
+      <NewHiddenSpotMap
+        setLatitude={setLat}
+        setLongitude={setLng}
+        setDisabled={setDisabled}
       />
     </Box>
   );
 };
 
-export default UsersPage;
+export default NewHiddenSpotPage;

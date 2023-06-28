@@ -32,9 +32,9 @@ const SignInPage = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Iniciar sesión
           </Typography>
-          {error && <Alert severity="error">{errorMessage}</Alert>}
+          {error && <Alert severity="error" variant="filled">{errorMessage}</Alert>}
           <SignInForm setError={setError} setErrorMessage={setErrorMessage} />
           <Grid container>
             <Grid item xs>

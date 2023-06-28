@@ -1,8 +1,8 @@
 import React from "react";
-import Map from "../components/Map";
+import HiddenSpotsMap from "../components/HiddenSpotsMap";
 const Home = () => {
   return (
-    <Map/>
+    <HiddenSpotsMap/>
   );
 };
 export default Home;

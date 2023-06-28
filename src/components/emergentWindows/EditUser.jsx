@@ -14,32 +14,32 @@ import {
   Box,
   FormControl,
   Grid,
-  IconButton,
-  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-const CreateUser = ({ open, handleClose, setStatus, setMessage }) => {
-  const { addUser } = useLists();
+const EditUser = ({
+  userId,
+  userToEdit,
+  open,
+  handleClose,
+  setStatus,
+  setMessage,
+}) => {
+  const { editUser } = useLists();
   const [data, setData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirm_password: "",
-    roleId: "",
+    id: userToEdit.id,
+    username: userToEdit.username,
+    email: userToEdit.email,
+    password: userToEdit.password,
+    roleId: userToEdit.roleId,
   });
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [role, setRole] = useState("");
+
+  const actualRole = userToEdit.roleId.toString() || "";
+  const [role, setRole] = useState(actualRole);
   const [roles, setRoles] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleClickShowConfirmPassword = () =>
-    setShowConfirmPassword((show) => !show);
 
   useEffect(() => {
     try {
@@ -58,7 +58,9 @@ const CreateUser = ({ open, handleClose, setStatus, setMessage }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    addUser(
+    console.log("DATA ", data);
+    editUser(
+      userId,
       role,
       data,
       setStatus,
@@ -72,7 +74,7 @@ const CreateUser = ({ open, handleClose, setStatus, setMessage }) => {
     <div>
       <Dialog open={open} onClose={handleClose}>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-          <DialogTitle>Crear usuario</DialogTitle>
+          <DialogTitle>Editar usuario</DialogTitle>
           <DialogContent>
             <DialogContentText>
               {errorMessage !== "" && (
@@ -92,6 +94,7 @@ const CreateUser = ({ open, handleClose, setStatus, setMessage }) => {
                   margin="normal"
                   required
                   id="username"
+                  defaultValue={userToEdit.username?.toString()}
                   label="Nombre de usuario"
                   name="username"
                   autoComplete="off"
@@ -109,6 +112,7 @@ const CreateUser = ({ open, handleClose, setStatus, setMessage }) => {
                   margin="normal"
                   required
                   id="email"
+                  defaultValue={userToEdit.email?.toString()}
                   label="Correo electrónico"
                   name="email"
                   autoComplete="off"
@@ -118,68 +122,6 @@ const CreateUser = ({ open, handleClose, setStatus, setMessage }) => {
                       email: e.target.value,
                     }))
                   }
-                />
-              </Grid>
-              <Grid item xs={2} sm={4} md={18}>
-                <TextField
-                  margin="normal"
-                  required
-                  name="password"
-                  label="Contraseña"
-                  type={showPassword ? "text" : "password"}
-                  id="password"
-                  autoComplete="off"
-                  onChange={(e) =>
-                    setData((prevState) => ({
-                      ...prevState,
-                      password: e.target.value,
-                    }))
-                  }
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                        >
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
-              <Grid item xs={2} sm={4} md={18}>
-                <TextField
-                  margin="normal"
-                  required
-                  name="confirm_password"
-                  label="Confirmar contraseña"
-                  type={showConfirmPassword ? "text" : "password"}
-                  id="confirm_password"
-                  autoComplete="off"
-                  onChange={(e) =>
-                    setData((prevState) => ({
-                      ...prevState,
-                      confirm_password: e.target.value,
-                    }))
-                  }
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowConfirmPassword}
-                        >
-                          {showConfirmPassword ? (
-                            <Visibility />
-                          ) : (
-                            <VisibilityOff />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
                 />
               </Grid>
               <Grid item xs={2} sm={4} md={18}>
@@ -212,11 +154,13 @@ const CreateUser = ({ open, handleClose, setStatus, setMessage }) => {
   );
 };
 
-CreateUser.propTypes = {
+EditUser.propTypes = {
+  userId: PropTypes.number.isRequired,
+  userToEdit: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   setStatus: PropTypes.func.isRequired,
   setMessage: PropTypes.func.isRequired,
 };
 
-export default CreateUser;
+export default EditUser;
