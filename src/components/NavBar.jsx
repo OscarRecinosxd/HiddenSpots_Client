@@ -15,7 +15,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { NavLink } from "react-router-dom";
 import { adminPages, touristPages } from "../utils/Pages";
 
-const settings = ["Perfil", "Cerrar sesión"];
+const settings = ["Cerrar sesión"];
 
 function NavBar() {
   const auth = useAuth();
@@ -45,7 +45,7 @@ function NavBar() {
   };
 
   return (
-    <AppBar color="secondary" position="static">
+    <AppBar color="primary" position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -59,12 +59,12 @@ function NavBar() {
               display: { xs: "none", md: "flex" },
               fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: ".3rem",
+              letterSpacing: ".2rem",
               color: "inherit",
               textDecoration: "none",
             }}
           >
-            LOGO
+            Hidden Spots
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -136,7 +136,7 @@ function NavBar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            <Tooltip title="Abrir ajustes">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
                   alt={auth.user.username}

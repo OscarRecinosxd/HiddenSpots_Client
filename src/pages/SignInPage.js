@@ -32,7 +32,7 @@ const SignInPage = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Iniciar sesión
           </Typography>
           {error && <Alert severity="error">{errorMessage}</Alert>}
           <SignInForm setError={setError} setErrorMessage={setErrorMessage} />
