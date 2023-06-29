@@ -13,6 +13,7 @@ import MapPage from "./pages/MapPage";
 import UsersPage from "./pages/UsersPage";
 import AdminRoute from "./utils/AdminRoute";
 import NewHiddenSpotPage from "./pages/NewHiddenSpotPage";
+import Home from "./pages/Home";
 
 const App = () => {
   return (
@@ -70,6 +71,7 @@ const App = () => {
                 }
               />
               <Route path="map" element={<MapPage />} />
+              <Route path="" element={<Home/>}/>
               <Route path="newhs" element={<NewHiddenSpotPage />} />
             </Route>
           </Routes>
