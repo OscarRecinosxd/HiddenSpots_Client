@@ -1,79 +1,73 @@
 /* eslint-disable no-undef */
-import React, { useState, useMemo } from "react";
-import { GoogleMap, InfoWindowF, MarkerF, useJsApiLoader } from "@react-google-maps/api";
-import axios from "axios";
+import React, { useState, useMemo, useEffect } from "react";
+import {
+  GoogleMap,
+  InfoWindowF,
+  MarkerF,
+  useJsApiLoader,
+} from "@react-google-maps/api";
+import PropTypes from "prop-types";
+import SpotPreview from "./emergentWindows/SpotPreview";
+import { useLists } from "../contexts/ListsContext";
 
-const HiddenSpotsMap = () => {
-  const [hiddenSpotsMarkers, setHiddenSpotsMarkers] = useState();
-  const [ActiveInfoWindow, setActiveInfoWindow] = useState()
-  const [isData, setIsData] = useState(false);
+const HiddenSpotsMap = ({ onDelete }) => {
+  const { hiddenSpotsMarkers, getHiddenSpots } = useLists();
+  const [ActiveInfoWindow, setActiveInfoWindow] = useState();
+
+  useEffect(() => {
+    getHiddenSpots();
+  }, []);
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_MAPS_API_KEY,
   });
-  const center = useMemo( () =>  ( { lat: 13.795802, lng: -88.961608 }),[]);  //const casa =   { lat : 13.670549, lng : -89.239163}
-
-  const fetchingHiddenSpots = async () => {
-    try {
-      const hiddenSpots = await axios.get(
-        process.env.REACT_APP_API_URL + "spots/hidden-spots"
-      );
-      console.log("Data", hiddenSpots.data);
-      console.log("Lenght", hiddenSpots.data.length);
-      if (hiddenSpots.data.length > 0) {
-        console.log("Hay data!");
-        setHiddenSpotsMarkers(hiddenSpots.data);
-        setIsData(true);
-      }
-    } catch (error) {
-      console.log("Error", error);
-    }
-  };
+  const center = useMemo(() => ({ lat: 13.795802, lng: -88.961608 }), []); //const casa =   { lat : 13.670549, lng : -89.239163}
 
   const handlerActiveInfoWindow = (marker) => {
-    if(marker === ActiveInfoWindow){
-      return
+    if (marker === ActiveInfoWindow) {
+      return;
     }
-    setActiveInfoWindow(marker)
-
-  }
-
-  if (!isLoaded) {
-    fetchingHiddenSpots();
-    return <div>Loading....</div>;
-  }
+    setActiveInfoWindow(marker);
+  };
 
   return (
     <>
-      <GoogleMap
-        center={center}
-        zoom={10}
-        mapContainerStyle={{ width: "100%", height: "1275px" }}
-      >
-        {console.log("MARKERS", hiddenSpotsMarkers)}
-        {isData &&
-          hiddenSpotsMarkers.map((e) => (
-            <MarkerF
-              key={e.id}
-              title={e.name}
-              position={{
-                lng: e.location.coordinates[0],
-                lat: e.location.coordinates[1],
-              }}
-              onClick={() => handlerActiveInfoWindow(e.id)}
-            >
-            {ActiveInfoWindow === e.id ? (
-              <InfoWindowF onCloseClick={() => setActiveInfoWindow(null)}>
-                <div>
-                  <p2>{e.name}</p2>
-                  <p>{e.description}</p>
-                </div>
-              </InfoWindowF>): null}
-            </MarkerF>
-          ))}
-      </GoogleMap>
+      {isLoaded ? (
+        <GoogleMap
+          center={center}
+          zoom={10}
+          mapContainerStyle={{ width: "100%", height: "1275px" }}
+        >
+          {hiddenSpotsMarkers?.length > 0 && hiddenSpotsMarkers?.map((e) => (
+              <MarkerF
+                key={e.id}
+                title={e.name}
+                position={{
+                  lng: e.location.coordinates[0],
+                  lat: e.location.coordinates[1],
+                }}
+                onClick={() => handlerActiveInfoWindow(e.id)}
+              >
+                {ActiveInfoWindow === e.id ? (
+                  <InfoWindowF onCloseClick={() => setActiveInfoWindow(null)}>
+                    <SpotPreview spot={e} onDelete={onDelete} />
+                  </InfoWindowF>
+                ) : null}
+              </MarkerF>
+            ))}
+        </GoogleMap>
+      ) : (
+        <>
+          {getHiddenSpots()}
+          <div>Loading...</div>
+        </>
+      )}
     </>
   );
+};
+
+HiddenSpotsMap.propTypes = {
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default HiddenSpotsMap;

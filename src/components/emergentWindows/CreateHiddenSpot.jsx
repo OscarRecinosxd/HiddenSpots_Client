@@ -18,6 +18,7 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
+import { useLists } from "../../contexts/ListsContext";
 
 const CreateHiddenSpot = ({
   open,
@@ -27,6 +28,7 @@ const CreateHiddenSpot = ({
   lat,
   lng,
 }) => {
+  const { createHiddenSpot } = useLists();
   const [data, setData] = useState({
     name: "",
     description: "",
@@ -82,33 +84,16 @@ const CreateHiddenSpot = ({
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    try {
-      axios
-        .post(process.env.REACT_APP_API_URL + "spots/create-hidden-spot", {
-          ...data,
-          tourismcategoryId: category,
-          phisicalconditiontypeId: condition,
-          imageUrl: image,
-        })
-        .then((res) => {
-          console.log("DATA ", data);
-          if (res.status === 201) {
-            setStatus(true);
-            handleClose();
-            setMessage("Lugar creado exitosamente.");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-          setErrorMessage(
-            err.response.data.result
-              ? err.response.data.result
-              : err.response.data
-          );
-        });
-    } catch (error) {
-      throw console.error(error);
-    }
+    createHiddenSpot(
+      data,
+      category,
+      condition,
+      image,
+      setStatus,
+      handleClose,
+      setMessage,
+      setErrorMessage
+    );
   };
 
   return (
