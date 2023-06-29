@@ -156,7 +156,6 @@ export const ListsProvider = ({ children }) => {
         .post(process.env.REACT_APP_API_URL + "spots/create-hidden-spot", body)
         .then((res) => {
           if (res.status === 201) {
-            console.log("EL ID  ", body);
             setStatus(true);
             handleClose();
             setMessage("Lugar creado exitosamente.");
@@ -176,7 +175,58 @@ export const ListsProvider = ({ children }) => {
     }
   };
 
-  const deleteHiddenSpot = (spotId, setStatus, setMessage, handleCloseConfirmationWindow) => {
+  const editHiddenSpot = (
+    spotId,
+    data,
+    category,
+    condition,
+    image,
+    setStatus,
+    handleClose,
+    setMessage,
+    setErrorMessage
+  ) => {
+    try {
+      const loggedUserId = auth.user.id;
+      axios
+        .patch(
+          process.env.REACT_APP_API_URL + `spots/update-hidden-spot/${spotId}`,
+          {
+            ...data,
+            ...data,
+            tourismcategoryId: category,
+            phisicalconditiontypeId: condition,
+            imageUrl: image,
+            userId: loggedUserId,
+          }
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            setStatus(true);
+            handleClose();
+            setMessage("Lugar editado exitosamente.");
+            getHiddenSpots();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          setErrorMessage(
+            err.response.data.result
+              ? err.response.data.result
+              : err.response.data
+          );
+        });
+    } catch (error) {
+      throw console.error(error);
+    }
+  };
+
+  const deleteHiddenSpot = (
+    spotId,
+    setStatus,
+    setMessage,
+    handleCloseConfirmationWindow
+  ) => {
     try {
       axios
         .delete(
@@ -213,6 +263,7 @@ export const ListsProvider = ({ children }) => {
       hiddenSpotsMarkers,
       getHiddenSpots,
       createHiddenSpot,
+      editHiddenSpot,
       deleteHiddenSpot,
     }),
     [usersList, hiddenSpotsMarkers]
