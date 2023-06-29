@@ -8,7 +8,7 @@ export const adminPages = [
         title: "Mapa"
     },
     {
-        path: "newhs",
+        path: "newhs ",
         title: "Nuevo lugar"
     },
 ]
