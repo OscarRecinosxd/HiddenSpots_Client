@@ -59,7 +59,6 @@ const App = () => {
               element={
                 <RequireAuth>
                   <Layout />
-                  <Home/>
                 </RequireAuth>
               }
             >
@@ -72,6 +71,7 @@ const App = () => {
                 }
               />
               <Route path="map" element={<MapPage />} />
+              <Route path="" element={<Home/>}/>
               <Route path="newhs" element={<NewHiddenSpotPage />} />
             </Route>
           </Routes>
