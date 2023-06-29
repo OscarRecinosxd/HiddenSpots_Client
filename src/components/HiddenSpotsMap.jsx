@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 import SpotPreview from "./emergentWindows/SpotPreview";
 import { useLists } from "../contexts/ListsContext";
 
-const HiddenSpotsMap = ({ onDelete }) => {
+const HiddenSpotsMap = ({ onEdit, onDelete }) => {
   const { hiddenSpotsMarkers, getHiddenSpots } = useLists();
   const [ActiveInfoWindow, setActiveInfoWindow] = useState();
 
@@ -50,7 +50,7 @@ const HiddenSpotsMap = ({ onDelete }) => {
               >
                 {ActiveInfoWindow === e.id ? (
                   <InfoWindowF onCloseClick={() => setActiveInfoWindow(null)}>
-                    <SpotPreview spot={e} onDelete={onDelete} />
+                    <SpotPreview spot={e} onEdit={onEdit} onDelete={onDelete} />
                   </InfoWindowF>
                 ) : null}
               </MarkerF>
@@ -67,6 +67,7 @@ const HiddenSpotsMap = ({ onDelete }) => {
 };
 
 HiddenSpotsMap.propTypes = {
+  onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
 };
 

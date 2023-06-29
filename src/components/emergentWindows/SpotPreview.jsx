@@ -6,7 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { useAuth } from "../../contexts/AuthProvider";
 
-const SpotPreview = ({ spot, onDelete }) => {
+const SpotPreview = ({ spot, onEdit, onDelete }) => {
   const auth = useAuth();
 
   return (
@@ -33,7 +33,11 @@ const SpotPreview = ({ spot, onDelete }) => {
           >
             Eliminar
           </Button>
-          <Button variant="contained" startIcon={<EditIcon />}>
+          <Button
+            variant="contained"
+            startIcon={<EditIcon />}
+            onClick={() => onEdit(spot.id)}
+          >
             Editar
           </Button>
         </Grid>
@@ -44,6 +48,7 @@ const SpotPreview = ({ spot, onDelete }) => {
 
 SpotPreview.propTypes = {
   spot: PropTypes.object.isRequired,
+  onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
 };
 
