@@ -25,7 +25,6 @@ const ForgotPassWordForm = ({ setError, setErrorMessage, setStatus, setSuccessMe
             .then((res)=>{
                 setIsLoading(false);
                 if(res.status===200){
-                    console.log(res.data)
                     setStatus("success");
                     setSuccessMessage(res.data.result)
                     //navigate(from, { replace: true })
