@@ -25,12 +25,12 @@ const ForgotPasswordPage = () => {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Recover password
+                        Restablecer contraseña
                     </Typography>
                     {error && <Alert severity="error">{errorMessage}</Alert>}
                     {status === "success" && (
                         <Alert severity="success">
-                            <AlertTitle>Success</AlertTitle>
+                            <AlertTitle>Correcto</AlertTitle>
                             <strong>{successMessage} </strong>
                         </Alert>
                     )}

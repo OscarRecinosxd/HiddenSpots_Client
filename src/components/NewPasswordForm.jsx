@@ -56,7 +56,7 @@ const NewPasswordForm = ({ setError, setErrorMessage, setStatus, setSuccessMessa
                     margin="normal"
                     required
                     name="new_password"
-                    label="Password"
+                    label="Nueva contraseña"
                     type={showPassword ? "text" : "password"}
                     id="new_password"
                     autoComplete="off"
@@ -85,7 +85,7 @@ const NewPasswordForm = ({ setError, setErrorMessage, setStatus, setSuccessMessa
                     margin="normal"
                     required
                     name="confirm_password"
-                    label="Confirm password"
+                    label="Confirmar contraseña"
                     type={showConfirmPassword ? "text" : "password"}
                     id="confirm_password"
                     autoComplete="off"
@@ -116,7 +116,7 @@ const NewPasswordForm = ({ setError, setErrorMessage, setStatus, setSuccessMessa
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
                     >
-                        Change Password
+                        Cambiar contraseña
                     </LoadingButton>
                 </Grid>
             </Grid>

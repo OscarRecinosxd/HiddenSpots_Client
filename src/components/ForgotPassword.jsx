@@ -47,7 +47,7 @@ const ForgotPassWordForm = ({ setError, setErrorMessage, setStatus, setSuccessMe
                 required
                 fullWidth
                 id="email"
-                label="Email"
+                label="Correo electrónico"
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -59,7 +59,7 @@ const ForgotPassWordForm = ({ setError, setErrorMessage, setStatus, setSuccessMe
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
             >
-                Send Email
+                Enviar correo
             </LoadingButton>
         </Box>
     )

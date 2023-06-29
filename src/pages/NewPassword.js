@@ -25,7 +25,7 @@ const NewPasswordPage = () => {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Change your password
+                        Nueva contraseña
                     </Typography>
                     {error && <Alert severity="error">{errorMessage}</Alert>}
                     {status === "success" && (
