@@ -20,26 +20,28 @@ import {
 } from "@mui/material";
 import { useLists } from "../../contexts/ListsContext";
 
-const CreateHiddenSpot = ({
+const EditHiddenSpot = ({
+  spotId,
+  spotToEdit,
   open,
   handleClose,
   setStatus,
   setMessage,
-  lat,
-  lng,
 }) => {
-  const { createHiddenSpot } = useLists();
+  const { editHiddenSpot } = useLists();
   const [data, setData] = useState({
-    name: "",
-    description: "",
-    lat: lat,
-    lng: lng,
-    tourismcategoryId: "",
-    phisicalconditiontypeId: "",
+    name: spotToEdit.name,
+    description: spotToEdit.description,
+    location: spotToEdit.location,
+    tourismcategoryId: spotToEdit.tourismcategoryId,
+    phisicalconditiontypeId: spotToEdit.phisicalconditiontypeId,
   });
-  const [category, setCategory] = useState("");
-  const [condition, setCondition] = useState("");
-  const [image, setImage] = useState("");
+  const actualCat = spotToEdit.tourismcategoryId || "";
+  const actualCond = spotToEdit.phisicalconditiontypeId || "";
+  const actualImg = spotToEdit.imageUrl || "";
+  const [category, setCategory] = useState(actualCat);
+  const [condition, setCondition] = useState(actualCond);
+  const [image, setImage] = useState(actualImg);
   const [categoriesList, setCategoriesList] = useState([]);
   const [conditionsList, setConditionsList] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
@@ -84,7 +86,8 @@ const CreateHiddenSpot = ({
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    createHiddenSpot(
+    editHiddenSpot(
+      spotId,
       data,
       category,
       condition,
@@ -100,7 +103,7 @@ const CreateHiddenSpot = ({
     <div>
       <Dialog open={open} onClose={handleClose}>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-          <DialogTitle>Crear lugar</DialogTitle>
+          <DialogTitle>Editar lugar</DialogTitle>
           <DialogContent>
             <DialogContentText>
               {errorMessage !== "" && (
@@ -108,7 +111,7 @@ const CreateHiddenSpot = ({
                   {errorMessage}
                 </Alert>
               )}
-              Para crear un lugar, por favor complete los siguientes datos:
+              Modifique los datos que desea actualizar:
             </DialogContentText>
             <Grid
               container
@@ -124,6 +127,7 @@ const CreateHiddenSpot = ({
                   name="name"
                   autoComplete="off"
                   autoFocus
+                  defaultValue={spotToEdit.name?.toString()}
                   onChange={(e) =>
                     setData((prevState) => ({
                       ...prevState,
@@ -141,6 +145,7 @@ const CreateHiddenSpot = ({
                   placeholder="Descirpción"
                   name="description"
                   autoComplete="off"
+                  defaultValue={spotToEdit.description?.toString()}
                   onChange={(e) =>
                     setData((prevState) => ({
                       ...prevState,
@@ -211,13 +216,13 @@ const CreateHiddenSpot = ({
   );
 };
 
-CreateHiddenSpot.propTypes = {
+EditHiddenSpot.propTypes = {
+  spotId: PropTypes.number.isRequired,
+  spotToEdit: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   setStatus: PropTypes.func.isRequired,
   setMessage: PropTypes.func.isRequired,
-  lat: PropTypes.number.isRequired,
-  lng: PropTypes.number.isRequired,
 };
 
-export default CreateHiddenSpot;
+export default EditHiddenSpot;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import { useLists } from "../contexts/ListsContext";
@@ -20,7 +20,7 @@ import ChangeUserStatus from "./emergentWindows/ChangeUserStatus";
 import EditUser from "./emergentWindows/EditUser";
 
 const UsersTable = ({ setStatus, setMessage }) => {
-  const { usersList } = useLists();
+  const { usersList, getUsers } = useLists();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
@@ -28,6 +28,10 @@ const UsersTable = ({ setStatus, setMessage }) => {
   const [userToModify, setUserToModify] = useState(null);
   const [userInfo, setUserInfo] = useState({});
   const totalUsers = usersList?.length || 0;
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   const columns = [
     { id: "username", label: "Nombre de usuario", minWidth: 170 },
@@ -93,7 +97,9 @@ const UsersTable = ({ setStatus, setMessage }) => {
 
   const handleOpenEditUserWindow = async (userId) => {
     setUserToModify(userId);
-    const { data } = await axios.get(process.env.REACT_APP_API_URL + `admin/${userId}`);
+    const { data } = await axios.get(
+      process.env.REACT_APP_API_URL + `admin/${userId}`
+    );
     setUserInfo(data);
     setOpenEditUserWindow(true);
   };

@@ -82,7 +82,7 @@ const EditUser = ({
                   {errorMessage}
                 </Alert>
               )}
-              Para crear un usuario, por favor complete los siguientes datos:
+              Modifique los datos que desea actualizar:
             </DialogContentText>
             <Grid
               container

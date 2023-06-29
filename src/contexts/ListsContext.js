@@ -1,11 +1,31 @@
-import { createContext, useState, useContext, useMemo, useEffect } from "react";
+import { createContext, useState, useContext, useMemo } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
+import { useAuth } from "./AuthProvider";
 
 const ListsContext = createContext();
 
 export const ListsProvider = ({ children }) => {
-  const [usersList, setUsersList] = useState();
+  const auth = useAuth();
+  const [usersList, setUsersList] = useState([]);
+  const [hiddenSpotsMarkers, setHiddenSpotsMarkers] = useState([]);
+
+  const getUsers = () => {
+    try {
+      axios
+        .get(process.env.REACT_APP_API_URL + "admin/users")
+        .then((res) => {
+          if (res.status === 200) {
+            setUsersList(res.data);
+          }
+        })
+        .catch((err) => {
+          throw console.error(err);
+        });
+    } catch (error) {
+      throw console.error(error);
+    }
+  };
 
   const addUser = (
     role,
@@ -17,7 +37,10 @@ export const ListsProvider = ({ children }) => {
   ) => {
     try {
       axios
-        .post(process.env.REACT_APP_API_URL + "admin/save-user", {...data, role: role})
+        .post(process.env.REACT_APP_API_URL + "admin/save-user", {
+          ...data,
+          role: role,
+        })
         .then((res) => {
           if (res.status === 201) {
             setStatus(true);
@@ -38,7 +61,7 @@ export const ListsProvider = ({ children }) => {
       throw console.error(error);
     }
   };
-  
+
   const editUser = (
     userId,
     role,
@@ -50,7 +73,10 @@ export const ListsProvider = ({ children }) => {
   ) => {
     try {
       axios
-        .patch(process.env.REACT_APP_API_URL + `admin/update-user/${userId}`, {...data, roleId: role})
+        .patch(process.env.REACT_APP_API_URL + `admin/update-user/${userId}`, {
+          ...data,
+          roleId: role,
+        })
         .then((res) => {
           if (res.status === 200) {
             setStatus(true);
@@ -93,35 +119,154 @@ export const ListsProvider = ({ children }) => {
     }
   };
 
-  const getUsers = () => {
+  const getHiddenSpots = () => {
     try {
       axios
-        .get(process.env.REACT_APP_API_URL + "admin/users")
+        .get(process.env.REACT_APP_API_URL + "spots/hidden-spots")
         .then((res) => {
           if (res.status === 200) {
-            setUsersList(res.data);
+            setHiddenSpotsMarkers(res.data);
           }
-        })
-        .catch((err) => {
-          throw console.error(err);
         });
     } catch (error) {
       throw console.error(error);
     }
   };
 
-  useEffect(() => {
-    getUsers();
-  }, []);
+  const createHiddenSpot = (
+    data,
+    category,
+    condition,
+    image,
+    setStatus,
+    handleClose,
+    setMessage,
+    setErrorMessage
+  ) => {
+    try {
+      const loggedUserId = auth.user.id;
+      const body = {
+        ...data,
+        tourismcategoryId: category,
+        phisicalconditiontypeId: condition,
+        imageUrl: image,
+        userId: loggedUserId,
+      };
+      axios
+        .post(process.env.REACT_APP_API_URL + "spots/create-hidden-spot", body)
+        .then((res) => {
+          if (res.status === 201) {
+            setStatus(true);
+            handleClose();
+            setMessage("Lugar creado exitosamente.");
+            getHiddenSpots();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          setErrorMessage(
+            err.response.data.result
+              ? err.response.data.result
+              : err.response.data
+          );
+        });
+    } catch (error) {
+      throw console.error(error);
+    }
+  };
+
+  const editHiddenSpot = (
+    spotId,
+    data,
+    category,
+    condition,
+    image,
+    setStatus,
+    handleClose,
+    setMessage,
+    setErrorMessage
+  ) => {
+    try {
+      const loggedUserId = auth.user.id;
+      axios
+        .patch(
+          process.env.REACT_APP_API_URL + `spots/update-hidden-spot/${spotId}`,
+          {
+            ...data,
+            ...data,
+            tourismcategoryId: category,
+            phisicalconditiontypeId: condition,
+            imageUrl: image,
+            userId: loggedUserId,
+          }
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            setStatus(true);
+            handleClose();
+            setMessage("Lugar editado exitosamente.");
+            getHiddenSpots();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          setErrorMessage(
+            err.response.data.result
+              ? err.response.data.result
+              : err.response.data
+          );
+        });
+    } catch (error) {
+      throw console.error(error);
+    }
+  };
+
+  const deleteHiddenSpot = (
+    spotId,
+    setStatus,
+    setMessage,
+    handleCloseConfirmationWindow
+  ) => {
+    try {
+      axios
+        .delete(
+          process.env.REACT_APP_API_URL + `spots/delete-hidden-spot/${spotId}`
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            setStatus(true);
+            setMessage("Lugar eliminado exitosamente");
+            handleCloseConfirmationWindow();
+            getHiddenSpots();
+          }
+        })
+        .catch((err) => {
+          setStatus(false);
+          setMessage(
+            err.response.data.result
+              ? err.response.data.result
+              : err.response.data
+          );
+        });
+    } catch (error) {
+      throw console.error(error);
+    }
+  };
 
   const values = useMemo(
     () => ({
       usersList,
+      getUsers,
       addUser,
       editUser,
       toggleUserStatus,
+      hiddenSpotsMarkers,
+      getHiddenSpots,
+      createHiddenSpot,
+      editHiddenSpot,
+      deleteHiddenSpot,
     }),
-    [usersList]
+    [usersList, hiddenSpotsMarkers]
   );
 
   return (

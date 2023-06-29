@@ -25,7 +25,6 @@ const ForgotPassWordForm = ({ setError, setErrorMessage, setStatus, setSuccessMe
             .then((res)=>{
                 setIsLoading(false);
                 if(res.status===200){
-                    console.log(res.data)
                     setStatus("success");
                     setSuccessMessage(res.data.result)
                     //navigate(from, { replace: true })
@@ -48,7 +47,7 @@ const ForgotPassWordForm = ({ setError, setErrorMessage, setStatus, setSuccessMe
                 required
                 fullWidth
                 id="email"
-                label="Email"
+                label="Correo electrónico"
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -60,7 +59,7 @@ const ForgotPassWordForm = ({ setError, setErrorMessage, setStatus, setSuccessMe
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
             >
-                Send Email
+                Enviar correo
             </LoadingButton>
         </Box>
     )
